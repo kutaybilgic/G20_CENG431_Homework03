@@ -1,0 +1,13 @@
+[ {
+  "readinglist_id" : "wIMspKcXefXGHtB",
+  "creator_researcher_name" : "researcher1",
+  "readinglist_name" : "readingList1",
+  "number_of_papers" : 2,
+  "name_of_papers" : [ "Test-Driven Modeling for Model-Driven Development", "Introducing Test Automation and Test-Driven Development" ]
+}, {
+  "readinglist_id" : "rdTExqQcR8EFUz0",
+  "creator_researcher_name" : "researcher1",
+  "readinglist_name" : "readingList2",
+  "number_of_papers" : 2,
+  "name_of_papers" : [ "Test-Driven Development: Concepts, Taxonomy, and Future Direction", "Learning Test-Driven Development by Counting Lines" ]
+} ]
