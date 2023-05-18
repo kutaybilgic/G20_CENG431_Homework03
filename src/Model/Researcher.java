@@ -1,7 +1,6 @@
 package Model;
 
 import File.FileCreator;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +31,13 @@ public class Researcher {
                 return null;
             }
         }
+
         FileCreator fileCreator = new FileCreator();
         ReadingList readingList = new ReadingList(researcher_name, readingList_name);
         readingLists.add(readingList);
         readingList.addPaper(paper);
         fileCreator.jsonWriter(readingList);
+
         return readingList;
     }
 

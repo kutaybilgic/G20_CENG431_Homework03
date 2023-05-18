@@ -37,11 +37,8 @@ public class FileParser {
                             String journal = entry.getField(BibTeXEntry.KEY_JOURNAL) != null ? entry.getField(BibTeXEntry.KEY_JOURNAL).toUserString() : "";
                             Article article = new Article(author, title, year, doi, volume, number, journal);
                             papers.add(article);
-
                         }
                     }
-
-
                     reader.close();
                 } catch (IOException | ParseException e) {
                     e.printStackTrace();
@@ -76,11 +73,8 @@ public class FileParser {
                             String booktitle = entry.getField(BibTeXEntry.KEY_BOOKTITLE) != null ? entry.getField(BibTeXEntry.KEY_BOOKTITLE).toUserString() : "";
                             ConferencePaper conferencePaper = new ConferencePaper(author, title, year, doi, booktitle);
                             papers.add(conferencePaper);
-
                         }
                     }
-
-
                     reader.close();
                 } catch (IOException | ParseException e) {
                     e.printStackTrace();

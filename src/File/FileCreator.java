@@ -1,7 +1,6 @@
 package File;
 
 import Model.*;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -134,40 +133,34 @@ public class FileCreator {
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
 
-        // Root element: researchers
         Document doc = docBuilder.newDocument();
         Element rootElement = doc.createElement("researchers");
         doc.appendChild(rootElement);
 
         for (Researcher researcher : researcherList) {
-            // Researcher element
+
             Element researcherElement = doc.createElement("researcher");
             rootElement.appendChild(researcherElement);
 
-            // researcher_name element
             Element researcherNameElement = doc.createElement("researcher_name");
             researcherNameElement.appendChild(doc.createTextNode(researcher.getResearcher_name()));
             researcherElement.appendChild(researcherNameElement);
 
-            // password element
             Element passwordElement = doc.createElement("password");
             passwordElement.appendChild(doc.createTextNode(researcher.getPassword()));
             researcherElement.appendChild(passwordElement);
 
-            // following_researcher_names element (empty for now)
             Element followingResearcherNamesElement = doc.createElement("following_researcher_names");
             researcherElement.appendChild(followingResearcherNamesElement);
 
-            // follower_researcher_names element (empty for now)
             Element followerResearcherNamesElement = doc.createElement("follower_researcher_names");
             researcherElement.appendChild(followerResearcherNamesElement);
         }
 
-        // Writing the XML content to a file (optional)
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(filePath); // Specify the file name
+        StreamResult result = new StreamResult(filePath);
         transformer.transform(source, result);
 
         System.out.println("XML file created successfully.");
@@ -183,7 +176,6 @@ public class FileCreator {
                 Document doc = docBuilder.parse(new File(xmlFileName));
 
                 Element rootElement = doc.getDocumentElement();
-
                 NodeList researcherNodes = rootElement.getElementsByTagName("researcher");
 
                 Element followElement = null;
@@ -191,7 +183,6 @@ public class FileCreator {
 
                 for (int i = 0; i < researcherNodes.getLength(); i++) {
                     Element researcherElement = (Element) researcherNodes.item(i);
-
                     String researcherName = researcherElement.getElementsByTagName("researcher_name").item(0).getTextContent();
 
                     if (researcherName.equals(follow.getResearcher_name())) {
