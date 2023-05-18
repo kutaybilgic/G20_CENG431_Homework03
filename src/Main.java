@@ -8,8 +8,5 @@ public class Main {
 
         RunApplication runApplication = new RunApplication();
         runApplication.runApp();
-
-
-
     }
 }
