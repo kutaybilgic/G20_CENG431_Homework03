@@ -1,15 +1,15 @@
-Article:Zhang, Yuefeng:Test-Driven Modeling for Model-Driven Development:2004:10.1109/MS.2004.1331307:21:5:IEEE Softw.:1000
-Article:Damm, Lars-Ola and Lundberg, Lars and Olsson, David:Introducing Test Automation and Test-Driven Development:2005::116:C:Electron. Notes Theor. Comput. Sci.:57
-Article:Erdogmus, Hakan and Morisio, Maurizio and Torchiano, Marco:On the Effectiveness of the Test-First Approach to Programming:2005:10.1109/TSE.2005.37:31:3:IEEE Trans. Softw. Eng.:55
-Article:Janzen, David and Saiedian, Hossein:Test-Driven Development: Concepts, Taxonomy, and Future Direction:2005:10.1109/MC.2005.314:38:9:Computer:278
-Article:Vodde, Bas and Koskela, Lasse:Learning Test-Driven Development by Counting Lines:2007:10.1109/MS.2007.80:24:3:IEEE Softw.:1004
-Article:Leroy, Xavier:A Formally Verified Compiler Back-End:2009:10.1007/s10817-009-9155-4:43:4:J. Autom. Reason.:1038
-Article:Pan\v{c}ur, Matja and Ciglari\v{c}, Mojca:Impact of Test-Driven Development on Productivity, Code and Tests: A Controlled Experiment:2011:10.1016/j.infsof.2011.02.002:53:6:Inf. Softw. Technol.:1280
-Article:Dog\v{s}a, Toma\v{z} and Bati\v{c}, David:The Effectiveness of Test-Driven Development: An Industrial Case Study:2011:10.1007/s11219-011-9130-2:19:4:Software Quality Journal:377
-Article:Latorre, Roberto:A Successful Application of a Test-Driven Development Strategy in the Industrial Environment:2014:10.1007/s10664-013-9281-9:19:3:Empirical Softw. Engg.:1252
-Conference Paper:George, Boby and Williams, Laurie:An Initial Investigation of Test Driven Development in Industry:2003:10.1145/952532.952753:Proceedings of the 2003 ACM Symposium on Applied Computing:1112
-Conference Paper:Leung, Karl R. P. H. and Yeung, W. L.:Generating User Acceptance Test Plans from Test Cases:2007:10.1109/COMPSAC.2007.125:Proceedings of the 31st Annual International Computer Software and Applications Conference - Volume 02:172
-Conference Paper:Hammond, Susan and Umphress, David:Test Driven Development: The State of the Practice:2012:10.1145/2184512.2184550:Proceedings of the 50th Annual Southeast Regional Conference:1149
-Conference Paper:Munir, Hussan and Wnuk, Krzysztof and Petersen, Kai and Moayyed, Misagh:An Experimental Evaluation of Test Driven Development vs. Test-Last Development with Industry Professionals:2014:10.1145/2601248.2601267:Proceedings of the 18th International Conference on Evaluation and Assessment in Software Engineering:1368
-Conference Paper:Santos, Ernani C\'{e}sar Dos and Vilain, Patr\'{\i}cia and Longo, Douglas Hiura:A Systematic Literature Review to Support the Selection of User Acceptance Testing Techniques:2018:10.1145/3183440.3195036:Proceedings of the 40th International Conference on Software Engineering: Companion Proceeedings:48
-Conference Paper:Tosun, Ayse and Ahmed, Muzamil and Turhan, Burak and Juristo, Natalia:On the Effectiveness of Unit Tests in Test-Driven Development:2018:10.1145/3202710.3203153:Proceedings of the 2018 International Conference on Software and System Process:799
+Article:Zhang, Yuefeng:Test-Driven Modeling for Model-Driven Development:2004:10.1109/MS.2004.1331307:21:5:IEEE Softw.:511
+Article:Damm, Lars-Ola and Lundberg, Lars and Olsson, David:Introducing Test Automation and Test-Driven Development:2005::116:C:Electron. Notes Theor. Comput. Sci.:971
+Article:Erdogmus, Hakan and Morisio, Maurizio and Torchiano, Marco:On the Effectiveness of the Test-First Approach to Programming:2005:10.1109/TSE.2005.37:31:3:IEEE Trans. Softw. Eng.:180
+Article:Janzen, David and Saiedian, Hossein:Test-Driven Development: Concepts, Taxonomy, and Future Direction:2005:10.1109/MC.2005.314:38:9:Computer:817
+Article:Vodde, Bas and Koskela, Lasse:Learning Test-Driven Development by Counting Lines:2007:10.1109/MS.2007.80:24:3:IEEE Softw.:203
+Article:Leroy, Xavier:A Formally Verified Compiler Back-End:2009:10.1007/s10817-009-9155-4:43:4:J. Autom. Reason.:540
+Article:Pan\v{c}ur, Matja and Ciglari\v{c}, Mojca:Impact of Test-Driven Development on Productivity, Code and Tests: A Controlled Experiment:2011:10.1016/j.infsof.2011.02.002:53:6:Inf. Softw. Technol.:1050
+Article:Dog\v{s}a, Toma\v{z} and Bati\v{c}, David:The Effectiveness of Test-Driven Development: An Industrial Case Study:2011:10.1007/s11219-011-9130-2:19:4:Software Quality Journal:691
+Article:Latorre, Roberto:A Successful Application of a Test-Driven Development Strategy in the Industrial Environment:2014:10.1007/s10664-013-9281-9:19:3:Empirical Softw. Engg.:1111
+Conference Paper:George, Boby and Williams, Laurie:An Initial Investigation of Test Driven Development in Industry:2003:10.1145/952532.952753:Proceedings of the 2003 ACM Symposium on Applied Computing:520
+Conference Paper:Leung, Karl R. P. H. and Yeung, W. L.:Generating User Acceptance Test Plans from Test Cases:2007:10.1109/COMPSAC.2007.125:Proceedings of the 31st Annual International Computer Software and Applications Conference - Volume 02:1288
+Conference Paper:Hammond, Susan and Umphress, David:Test Driven Development: The State of the Practice:2012:10.1145/2184512.2184550:Proceedings of the 50th Annual Southeast Regional Conference:395
+Conference Paper:Munir, Hussan and Wnuk, Krzysztof and Petersen, Kai and Moayyed, Misagh:An Experimental Evaluation of Test Driven Development vs. Test-Last Development with Industry Professionals:2014:10.1145/2601248.2601267:Proceedings of the 18th International Conference on Evaluation and Assessment in Software Engineering:613
+Conference Paper:Santos, Ernani C\'{e}sar Dos and Vilain, Patr\'{\i}cia and Longo, Douglas Hiura:A Systematic Literature Review to Support the Selection of User Acceptance Testing Techniques:2018:10.1145/3183440.3195036:Proceedings of the 40th International Conference on Software Engineering: Companion Proceeedings:1381
+Conference Paper:Tosun, Ayse and Ahmed, Muzamil and Turhan, Burak and Juristo, Natalia:On the Effectiveness of Unit Tests in Test-Driven Development:2018:10.1145/3202710.3203153:Proceedings of the 2018 International Conference on Software and System Process:776

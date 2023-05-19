@@ -1,0 +1,37 @@
+[ {
+  "readinglist_id" : "uArVzFDNi7ovwpI",
+  "creator_researcher_name" : "DilekOzturk",
+  "readinglist_name" : "readingList1",
+  "number_of_papers" : 0,
+  "name_of_papers" : [ ]
+}, {
+  "readinglist_id" : "dQNLsaK9paZMv4o",
+  "creator_researcher_name" : "SerhatCaner",
+  "readinglist_name" : "readingList2",
+  "number_of_papers" : 2,
+  "name_of_papers" : [ "Test-Driven Development: Concepts, Taxonomy, and Future Direction", "Learning Test-Driven Development by Counting Lines" ]
+}, {
+  "readinglist_id" : "CiuULYoVrEceFsi",
+  "creator_researcher_name" : "TugkanTuglular",
+  "readinglist_name" : "readingList3",
+  "number_of_papers" : 0,
+  "name_of_papers" : [ ]
+}, {
+  "readinglist_id" : "W6mQxSWWBsp8ItL",
+  "creator_researcher_name" : "DilekOzturk",
+  "readinglist_name" : "readingList1",
+  "number_of_papers" : 0,
+  "name_of_papers" : [ ]
+}, {
+  "readinglist_id" : "p7rAjT7ul2DHrh7",
+  "creator_researcher_name" : "SerhatCaner",
+  "readinglist_name" : "readingList2",
+  "number_of_papers" : 2,
+  "name_of_papers" : [ "Test-Driven Development: Concepts, Taxonomy, and Future Direction", "Learning Test-Driven Development by Counting Lines" ]
+}, {
+  "readinglist_id" : "fA5Z3pDowgVnWRq",
+  "creator_researcher_name" : "TugkanTuglular",
+  "readinglist_name" : "readingList3",
+  "number_of_papers" : 0,
+  "name_of_papers" : [ ]
+} ]

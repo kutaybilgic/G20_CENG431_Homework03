@@ -57,7 +57,7 @@ public class FileCreator {
     }
 
     public void jsonWriter(ReadingList readingList) {
-        String filePath = "createdReadingLists.json";
+        String filePath = "ReadingLists.json";
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
@@ -91,7 +91,7 @@ public class FileCreator {
     }
 
     public void jsonUpdateReadingList(ReadingList readingList, Paper paper, boolean isAdd) throws IOException {
-        String filePath = "createdReadingLists.json";
+        String filePath = "ReadingLists.json";
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
