@@ -172,11 +172,15 @@ public class FileCreator {
         Researcher researcher3 = new Researcher("TugkanTuglular", "tuglulartugkan");
         Researcher researcher4 = new Researcher("NesliErdogmus", "erdogmusnesli");
         Researcher researcher5 = new Researcher("AltugYigit", "yigitaltug");
+        Researcher researcher6 = new Researcher("KutayBilgic", "bilgickutay");
+        Researcher researcher7 = new Researcher("CanEkenoglu", "ekenoglucan");
         researcherList.add(researcher1);
         researcherList.add(researcher2);
         researcherList.add(researcher3);
         researcherList.add(researcher4);
         researcherList.add(researcher5);
+        researcherList.add(researcher6);
+        researcherList.add(researcher7);
 
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
