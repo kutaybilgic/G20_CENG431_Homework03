@@ -95,22 +95,22 @@ public class FileParser {
 
     public boolean xmlResearcherReader(String xmlFileName, String researcherName, String password) {
         try {
-            // XML dosyasını oku
+
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(new File(xmlFileName));
 
-            // <researcher> düğümlerini al
+
             NodeList researcherNodes = doc.getElementsByTagName("researcher");
 
-            // Her <researcher> düğümü için kontrol yap
+
             for (int i = 0; i < researcherNodes.getLength(); i++) {
                 Element researcherElement = (Element) researcherNodes.item(i);
                 String name = researcherElement.getElementsByTagName("researcher_name").item(0).getTextContent();
                 String pass = researcherElement.getElementsByTagName("password").item(0).getTextContent();
 
                 if (name.equals(researcherName) && pass.equals(password)) {
-                    return true; // Eşleşen araştırmacı adı ve şifre bulundu
+                    return true;
                 }
             }
 
@@ -118,7 +118,7 @@ public class FileParser {
             e.printStackTrace();
         }
 
-        return false; // Eşleşen araştırmacı adı ve şifre bulunamadı
+        return false;
     }
 
 }
