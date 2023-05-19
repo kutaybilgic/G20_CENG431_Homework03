@@ -3,6 +3,7 @@ package Model;
 import File.FileCreator;
 import Util.StringGenerator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,24 +27,29 @@ public class ReadingList {
         this.papers = new ArrayList<>();
     }
 
-    public void addPaper(Paper paper) {
+    public void addPaper(Paper paper) throws IOException {
         if (papers.contains(paper)) {
             System.out.println("Paper already in reading list");
         }
         else {
-            if (number_of_papers > 0) {
                 FileCreator fileCreator = new FileCreator();
                 papers.add(paper);
                 number_of_papers++;
-                fileCreator.jsonWriter(this);
-            }
-            else {
-                papers.add(paper);
-                number_of_papers++;
-            }
-
+                fileCreator.jsonUpdateReadingList(this, paper, true);
         }
 
+    }
+
+    public void removePaper(Paper paper) throws IOException {
+        if (papers.contains(paper)) {
+            FileCreator fileCreator = new FileCreator();
+            papers.remove(paper);
+            number_of_papers--;
+            fileCreator.jsonUpdateReadingList(this, paper, false);
+        }
+        else {
+            System.out.println("Paper not in reading list");
+        }
     }
 
     public String getReadinglist_id() {

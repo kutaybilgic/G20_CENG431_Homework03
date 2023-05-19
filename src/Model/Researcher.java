@@ -1,6 +1,8 @@
 package Model;
 
 import File.FileCreator;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class Researcher {
         this.readingLists =  new ArrayList<>();
     }
 
-    public ReadingList createReadingList(String readingList_name, Paper paper) {
+    public ReadingList createReadingList(String readingList_name, Paper paper) throws IOException {
         for (ReadingList readingList1 : readingLists) {
             if (readingList1.getReadinglist_name().equals(readingList_name)) {
                 System.out.println("Reading list already exists");
@@ -35,9 +37,8 @@ public class Researcher {
         FileCreator fileCreator = new FileCreator();
         ReadingList readingList = new ReadingList(researcher_name, readingList_name);
         readingLists.add(readingList);
-        readingList.addPaper(paper);
         fileCreator.jsonWriter(readingList);
-
+        readingList.addPaper(paper);
         return readingList;
     }
 

@@ -1,6 +1,8 @@
 package Model;
 
 
+import File.FileCreator;
+
 import java.util.Random;
 
 public abstract class Paper {
@@ -27,7 +29,10 @@ public abstract class Paper {
     }
 
     public void downloadPaper(){
+        System.out.println(number_of_downloads);
+        FileCreator fileCreator = new FileCreator();
         this.number_of_downloads++;
+        fileCreator.csvUpdater("papers.csv",this);
     }
 
     public String getType() {

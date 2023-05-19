@@ -4,6 +4,8 @@ import Model.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -14,6 +16,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -26,24 +29,24 @@ public class FileCreator {
     public void csvWriter(String filePath, List<Article> articleList, List<ConferencePaper> conferencePaperList) {
         try (java.io.FileWriter writer = new java.io.FileWriter(filePath)) {
             for (Article article : articleList) {
-                writer.append(article.getType()).append(",");
-                writer.append(article.getAuthors()).append(",");
-                writer.append(article.getTitle()).append(",");
-                writer.append(String.valueOf(article.getYear())).append(",");
-                writer.append(article.getDoi()).append(",");
-                writer.append(String.valueOf(article.getVolume())).append(",");
-                writer.append(article.getNumber()).append(",");
-                writer.append(article.getJournal()).append(",");
+                writer.append(article.getType()).append(":");
+                writer.append(article.getAuthors()).append(":");
+                writer.append(article.getTitle()).append(":");
+                writer.append(String.valueOf(article.getYear())).append(":");
+                writer.append(article.getDoi()).append(":");
+                writer.append(String.valueOf(article.getVolume())).append(":");
+                writer.append(article.getNumber()).append(":");
+                writer.append(article.getJournal()).append(":");
                 writer.append(String.valueOf(article.getNumber_of_downloads())).append("\n");
             }
 
             for (ConferencePaper conferencePaper : conferencePaperList) {
-                writer.append(conferencePaper.getType()).append(",");
-                writer.append(conferencePaper.getAuthors()).append(",");
-                writer.append(conferencePaper.getTitle()).append(",");
-                writer.append(String.valueOf(conferencePaper.getYear())).append(",");
-                writer.append(conferencePaper.getDoi()).append(",");
-                writer.append(conferencePaper.getBooktitle()).append(",");
+                writer.append(conferencePaper.getType()).append(":");
+                writer.append(conferencePaper.getAuthors()).append(":");
+                writer.append(conferencePaper.getTitle()).append(":");
+                writer.append(String.valueOf(conferencePaper.getYear())).append(":");
+                writer.append(conferencePaper.getDoi()).append(":");
+                writer.append(conferencePaper.getBooktitle()).append(":");
                 writer.append(String.valueOf(conferencePaper.getNumber_of_downloads())).append("\n");
             }
 
@@ -55,58 +58,30 @@ public class FileCreator {
 
     public void jsonWriter(ReadingList readingList) {
         String filePath = "createdReadingLists.json";
-
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         try {
             File file = new File(filePath);
 
-            if (!file.exists()) {
-                file.createNewFile();
-                ArrayNode rootNode = objectMapper.createArrayNode();
-                ObjectNode readingListNode = objectMapper.valueToTree(readingList);
-                ArrayNode paperTitlesNode = objectMapper.createArrayNode();
-                for (Paper paper : readingList.getPapers()) {
-                    paperTitlesNode.add(paper.getTitle());
-                }
-                readingListNode.remove("papers");
-                readingListNode.set("name_of_papers", paperTitlesNode);
-                rootNode.add(readingListNode);
-                objectMapper.writeValue(file, rootNode);
+            ArrayNode rootNode;
+
+            if (file.exists()) {
+                rootNode = objectMapper.readValue(file, ArrayNode.class);
             } else {
-                ArrayNode rootNode = objectMapper.readValue(file, ArrayNode.class);
-                boolean found = false;
-
-                for (int i = 0; i < rootNode.size(); i++) {
-                    ObjectNode node = (ObjectNode) rootNode.get(i);
-                    if (node.get("readinglist_id").asText().equals(readingList.getReadinglist_id())) {
-                        node.put("number_of_papers", readingList.getNumber_of_papers());
-
-                        ArrayNode paperTitlesNode = objectMapper.createArrayNode();
-                        for (Paper paper : readingList.getPapers()) {
-                            paperTitlesNode.add(paper.getTitle());
-                        }
-                        node.set("name_of_papers", paperTitlesNode);
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found) {
-                    ObjectNode readingListNode = objectMapper.valueToTree(readingList);
-                    ArrayNode paperTitlesNode = objectMapper.createArrayNode();
-                    for (Paper paper : readingList.getPapers()) {
-                        paperTitlesNode.add(paper.getTitle());
-                    }
-                    readingListNode.remove("papers");
-                    readingListNode.set("name_of_papers", paperTitlesNode);
-                    rootNode.add(readingListNode);
-                }
-
-                objectMapper.writeValue(file, rootNode);
-
+                rootNode = objectMapper.createArrayNode();
             }
+
+            ObjectNode readingListNode = objectMapper.valueToTree(readingList);
+            ArrayNode paperTitlesNode = objectMapper.createArrayNode();
+            for (Paper paper : readingList.getPapers()) {
+                paperTitlesNode.add(paper.getTitle());
+            }
+            readingListNode.remove("papers");
+            readingListNode.set("name_of_papers", paperTitlesNode);
+            rootNode.add(readingListNode);
+
+            objectMapper.writeValue(file, rootNode);
 
             System.out.println("ReadingList verileri JSON dosyasına başarıyla yazıldı.");
 
@@ -115,7 +90,81 @@ public class FileCreator {
         }
     }
 
-    public List<Researcher> xmlWriter(String filePath) throws ParserConfigurationException, TransformerException {
+    public void jsonUpdateReadingList(ReadingList readingList, Paper paper, boolean isAdd) throws IOException {
+        String filePath = "createdReadingLists.json";
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+            JsonNode rootNode = objectMapper.readTree(new File(filePath));
+
+            if (isAdd) {
+                boolean readingListFound = false;
+                for (JsonNode node : rootNode) {
+                    if (node.get("readinglist_id").asText().equals(readingList.getReadinglist_id())) {
+                        ArrayNode paperTitlesNode = (ArrayNode) node.get("name_of_papers");
+                        boolean paperExists = false;
+                        for (JsonNode titleNode : paperTitlesNode) {
+                            if (titleNode.asText().equals(paper.getTitle())) {
+                                paperExists = true;
+                                break;
+                            }
+                        }
+
+                        if (!paperExists) {
+                            paperTitlesNode.add(paper.getTitle());
+                            ((ObjectNode) node).put("number_of_papers", paperTitlesNode.size());
+                            readingListFound = true;
+                            break;
+                        } else {
+                            System.out.println("Belirtilen paper başlığı zaten name_of_papers listesinde mevcut.");
+                            readingListFound = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!readingListFound) {
+                    System.out.println("Belirtilen reading list ID'sine sahip bir kayıt bulunamadı.");
+                } else {
+                    objectMapper.writeValue(new File(filePath), rootNode);
+                    System.out.println("Paper başarıyla reading list'e eklendi ve JSON dosyası güncellendi.");
+                }
+            }
+
+            else {
+                boolean paperRemoved = false;
+                for (JsonNode node : rootNode) {
+                    if (node.get("readinglist_id").asText().equals(readingList.getReadinglist_id())) {
+                        ArrayNode paperTitlesNode = (ArrayNode) node.get("name_of_papers");
+                        for (int i = 0; i < paperTitlesNode.size(); i++) {
+                            String paperTitle = paperTitlesNode.get(i).asText();
+                            if (paperTitle.equals(paper.getTitle())) {
+                                paperTitlesNode.remove(i);
+                                paperRemoved = true;
+                                break;
+                            }
+                        }
+                        ((ObjectNode) node).put("number_of_papers", paperTitlesNode.size());
+
+                        break;
+                    }
+                }
+
+                if (paperRemoved) {
+                    objectMapper.writeValue(new File(filePath), rootNode);
+                    System.out.println("Paper başarıyla kaldırıldı ve JSON dosyası güncellendi.");
+                } else {
+                    System.out.println("Belirtilen reading list ID'sine veya paper başlığına sahip bir kayıt bulunamadı.");
+                }
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Researcher> xmlWriter(String filePath) throws ParserConfigurationException, TransformerException, FileNotFoundException {
 
         List<Researcher> researcherList = new ArrayList<>();
         Researcher researcher1 = new Researcher("DilekOzturk", "ozturkdilek");
@@ -159,8 +208,13 @@ public class FileCreator {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes"); // XML deklarasyonunu kaldır
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml"); // Çıktı formatını XML olarak ayarla
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes"); // Satır satır biçimlendirme için
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2"); // Girinti miktarı
+
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(filePath);
+        StreamResult result = new StreamResult(new FileOutputStream(filePath));
         transformer.transform(source, result);
 
         System.out.println("XML file created successfully.");
@@ -233,9 +287,12 @@ public class FileCreator {
                             }
                         }
                     }
-
                     TransformerFactory transformerFactory = TransformerFactory.newInstance();
                     Transformer transformer = transformerFactory.newTransformer();
+                    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes"); // XML deklarasyonunu kaldır
+                    transformer.setOutputProperty(OutputKeys.METHOD, "xml"); // Çıktı formatını XML olarak ayarla
+                    transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2"); // Girinti miktarı
+
                     DOMSource source = new DOMSource(doc);
                     StreamResult result = new StreamResult(new File(xmlFileName));
                     transformer.transform(source, result);
@@ -246,6 +303,33 @@ public class FileCreator {
                 }
 
             } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void csvUpdater(String csvFileName, Paper paper) {
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(csvFileName));
+                StringBuilder updatedContent = new StringBuilder();
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] fields = line.split(":");
+                    if (fields.length >= 4 && fields[2].equals(paper.getTitle())) {
+                        int downloadCount = paper.getNumber_of_downloads();
+                        fields[fields.length - 1] = String.valueOf(downloadCount);
+                    }
+                    updatedContent.append(String.join(":", fields)).append("\n");
+                }
+                reader.close();
+
+                FileWriter writer = new FileWriter(csvFileName);
+                writer.write(updatedContent.toString());
+                writer.close();
+
+                System.out.println("CSV dosyası güncellendi.");
+
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
