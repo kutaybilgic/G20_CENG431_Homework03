@@ -29,24 +29,24 @@ public class FileCreator {
     public void csvWriter(String filePath, List<Article> articleList, List<ConferencePaper> conferencePaperList) {
         try (java.io.FileWriter writer = new java.io.FileWriter(filePath)) {
             for (Article article : articleList) {
-                writer.append(article.getType()).append(":");
-                writer.append(article.getAuthors()).append(":");
-                writer.append(article.getTitle()).append(":");
-                writer.append(String.valueOf(article.getYear())).append(":");
-                writer.append(article.getDoi()).append(":");
-                writer.append(String.valueOf(article.getVolume())).append(":");
-                writer.append(article.getNumber()).append(":");
-                writer.append(article.getJournal()).append(":");
+                writer.append(article.getType()).append(";");
+                writer.append(article.getAuthors()).append(";");
+                writer.append(article.getTitle()).append(";");
+                writer.append(String.valueOf(article.getYear())).append(";");
+                writer.append(article.getDoi()).append(";");
+                writer.append(String.valueOf(article.getVolume())).append(";");
+                writer.append(article.getNumber()).append(";");
+                writer.append(article.getJournal()).append(";");
                 writer.append(String.valueOf(article.getNumber_of_downloads())).append("\n");
             }
 
             for (ConferencePaper conferencePaper : conferencePaperList) {
-                writer.append(conferencePaper.getType()).append(":");
-                writer.append(conferencePaper.getAuthors()).append(":");
-                writer.append(conferencePaper.getTitle()).append(":");
-                writer.append(String.valueOf(conferencePaper.getYear())).append(":");
-                writer.append(conferencePaper.getDoi()).append(":");
-                writer.append(conferencePaper.getBooktitle()).append(":");
+                writer.append(conferencePaper.getType()).append(";");
+                writer.append(conferencePaper.getAuthors()).append(";");
+                writer.append(conferencePaper.getTitle()).append(";");
+                writer.append(String.valueOf(conferencePaper.getYear())).append(";");
+                writer.append(conferencePaper.getDoi()).append(";");
+                writer.append(conferencePaper.getBooktitle()).append(";");
                 writer.append(String.valueOf(conferencePaper.getNumber_of_downloads())).append("\n");
             }
 
@@ -212,10 +212,10 @@ public class FileCreator {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes"); // XML deklarasyonunu kaldır
-        transformer.setOutputProperty(OutputKeys.METHOD, "xml"); // Çıktı formatını XML olarak ayarla
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes"); // Satır satır biçimlendirme için
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2"); // Girinti miktarı
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
         DOMSource source = new DOMSource(doc);
         StreamResult result = new StreamResult(new FileOutputStream(filePath));
@@ -318,12 +318,12 @@ public class FileCreator {
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    String[] fields = line.split(":");
+                    String[] fields = line.split(";");
                     if (fields.length >= 4 && fields[2].equals(paper.getTitle())) {
                         int downloadCount = paper.getNumber_of_downloads();
                         fields[fields.length - 1] = String.valueOf(downloadCount);
                     }
-                    updatedContent.append(String.join(":", fields)).append("\n");
+                    updatedContent.append(String.join(";", fields)).append("\n");
                 }
                 reader.close();
 

@@ -27,29 +27,27 @@ public class ReadingList {
         this.papers = new ArrayList<>();
     }
 
-    public void addPaper(Paper paper) throws IOException {
-        if (papers.contains(paper)) {
-            System.out.println("Paper already in reading list");
-        }
-        else {
-                FileCreator fileCreator = new FileCreator();
-                papers.add(paper);
-                number_of_papers++;
-                fileCreator.jsonUpdateReadingList(this, paper, true);
-        }
+    public ReadingList(String readinglist_id, String creator_researcher_name, String readinglist_name, int number_of_papers, List<Paper> papers) {
+        this.readinglist_id = readinglist_id;
+        this.creator_researcher_name = creator_researcher_name;
+        this.readinglist_name = readinglist_name;
+        this.number_of_papers = number_of_papers;
+        this.papers = papers;
+    }
 
+    public void addPaper(Paper paper) throws IOException {
+        FileCreator fileCreator = new FileCreator();
+        papers.add(paper);
+        number_of_papers++;
+        fileCreator.jsonUpdateReadingList(this, paper, true);
     }
 
     public void removePaper(Paper paper) throws IOException {
-        if (papers.contains(paper)) {
-            FileCreator fileCreator = new FileCreator();
-            papers.remove(paper);
-            number_of_papers--;
-            fileCreator.jsonUpdateReadingList(this, paper, false);
-        }
-        else {
-            System.out.println("Paper not in reading list");
-        }
+        FileCreator fileCreator = new FileCreator();
+        papers.remove(paper);
+        number_of_papers--;
+        fileCreator.jsonUpdateReadingList(this, paper, false);
+
     }
 
     public String getReadinglist_id() {

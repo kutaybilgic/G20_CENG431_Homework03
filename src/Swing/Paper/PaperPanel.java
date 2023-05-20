@@ -1,21 +1,25 @@
 package Swing.Paper;
 
 import Controller.PaperController;
-import Model.Article;
-import Model.ConferencePaper;
-import Model.Paper;
+import Model.*;
 import Swing.MainPanel;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.List;
 
 public class PaperPanel extends JPanel {
 
     private String username;
-    public PaperPanel() {
+
+    private List<ReadingList> readingLists;
+    public PaperPanel(List<ReadingList> readingLists) throws IOException, ParserConfigurationException, TransformerException {
+        this.readingLists = readingLists;
         PaperController paperController = new PaperController();
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -35,6 +39,7 @@ public class PaperPanel extends JPanel {
 
         add(listPanel, BorderLayout.CENTER);
 
+
         JButton viewDetailsButton = new JButton("View Details");
         viewDetailsButton.addActionListener(new ActionListener() {
             @Override
@@ -50,7 +55,7 @@ public class PaperPanel extends JPanel {
                     }
                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(PaperPanel.this);
                     frame.getContentPane().removeAll();
-                    PaperDetailsPanel paperDetailsPanel = new PaperDetailsPanel(selectedPaper);
+                    PaperDetailsPanel paperDetailsPanel = new PaperDetailsPanel(selectedPaper,readingLists );
                     paperDetailsPanel.setUsername(username);
                     frame.getContentPane().add(paperDetailsPanel);
                     frame.revalidate();
@@ -66,7 +71,7 @@ public class PaperPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(PaperPanel.this);
                 frame.getContentPane().removeAll();
-                MainPanel mainPanel = new MainPanel();
+                MainPanel mainPanel = new MainPanel(readingLists);
                 mainPanel.setUsername(username);
                 frame.getContentPane().add(mainPanel);
                 frame.revalidate();
@@ -92,5 +97,13 @@ public class PaperPanel extends JPanel {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<ReadingList> getReadingLists() {
+        return readingLists;
+    }
+
+    public void setReadingLists(List<ReadingList> readingLists) {
+        this.readingLists = readingLists;
     }
 }

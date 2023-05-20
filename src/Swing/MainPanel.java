@@ -1,18 +1,26 @@
 package Swing;
 
+import Model.ReadingList;
 import Swing.Paper.PaperPanel;
+import Swing.ReadingList.MyReadingListPanel;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.List;
 
 public class MainPanel extends JPanel {
 
     private JLabel welcomeLabel;
     private String username;
+    private List<ReadingList> readingLists;
 
-    public MainPanel() {
+    public MainPanel(List<ReadingList> readingLists) {
+        this.readingLists = readingLists;
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -31,7 +39,12 @@ public class MainPanel extends JPanel {
         showAllPapersButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PaperPanel paperPanel = new PaperPanel();
+                PaperPanel paperPanel = null;
+                try {
+                    paperPanel = new PaperPanel(readingLists);
+                } catch (IOException | ParserConfigurationException | TransformerException ex) {
+                    throw new RuntimeException(ex);
+                }
                 paperPanel.setUsername(username);
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(MainPanel.this);
                 frame.getContentPane().removeAll();
@@ -55,7 +68,13 @@ public class MainPanel extends JPanel {
         viewReadingListsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Kullanıcının kendi reading listelerini görüntüleme işlemi
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(MainPanel.this);
+                frame.getContentPane().removeAll();
+                MyReadingListPanel myReadingListPanel = new MyReadingListPanel(username, readingLists);
+                myReadingListPanel.setUsername(username);
+                frame.getContentPane().add(myReadingListPanel);
+                frame.revalidate();
+                frame.repaint();
             }
         });
         buttonPanel.add(viewReadingListsButton, gbc);
@@ -96,4 +115,11 @@ public class MainPanel extends JPanel {
         return button;
     }
 
+    public List<ReadingList> getReadingLists() {
+        return readingLists;
+    }
+
+    public void setReadingLists(List<ReadingList> readingLists) {
+        this.readingLists = readingLists;
+    }
 }

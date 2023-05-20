@@ -14,11 +14,15 @@ public class PaperController {
 
     public List<Article> getAllArticles() {
 
-        return fileParser.parseBibFileArticle("papers");
+        return fileParser.readCSVArticle("papers.csv");
     }
 
     public List<ConferencePaper> getAllConferencePapers() {
 
-        return fileParser.parseBibFileConferencePaper("papers");
+        return fileParser.readCSVConferencePaper("papers.csv");
+    }
+
+    public boolean isPaperInList(String username, String listName, Paper paper) {
+        return fileParser.jsonIsPaperInList(paper, username, listName);
     }
 }

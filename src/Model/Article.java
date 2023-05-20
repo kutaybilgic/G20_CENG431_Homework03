@@ -16,6 +16,12 @@ public class Article extends Paper{
         this.journal = journal;
     }
 
+    public Article(String authors, String title, int year, String doi, int number_of_downloads, String type, int volume, String number, String journal) {
+        super(authors, title, year, doi, number_of_downloads, type);
+        this.volume = volume;
+        this.number = number;
+        this.journal = journal;
+    }
 
     @Override
     public void downloadPaper() {

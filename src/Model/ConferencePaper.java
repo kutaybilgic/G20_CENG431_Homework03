@@ -9,6 +9,11 @@ public class ConferencePaper extends Paper{
         this.booktitle = booktitle;
     }
 
+    public ConferencePaper(String authors, String title, int year, String doi, int number_of_downloads, String type, String booktitle) {
+        super(authors, title, year, doi, number_of_downloads, type);
+        this.booktitle = booktitle;
+    }
+
     @Override
     public void downloadPaper() {
         super.downloadPaper();
