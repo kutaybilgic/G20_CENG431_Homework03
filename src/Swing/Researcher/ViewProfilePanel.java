@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.List;
 
 public class ViewProfilePanel extends JPanel {
@@ -101,6 +102,13 @@ public class ViewProfilePanel extends JPanel {
                     JOptionPane.showMessageDialog(ViewProfilePanel.this, "You have already followed this researcher.", "Follow Researcher", JOptionPane.WARNING_MESSAGE);
                 } else {
                     researcher.follow(selectedResearcher);
+                    Researcher newResearcher = null;
+                    for(Researcher researcher1 : researcherList) {
+                        if (researcher1.getResearcher_name().equals(researcher.getResearcher_name())) {
+                            newResearcher = researcher1;
+                        }
+                    }
+                    researcherList.get(researcherList.indexOf(newResearcher)).getFollowing_researcher_names().add(selectedResearcher.getResearcher_name());
                     try {
                         refreshPaperDetailsPanel();
                     } catch (IOException ex) {
@@ -126,6 +134,13 @@ public class ViewProfilePanel extends JPanel {
                     JOptionPane.showMessageDialog(ViewProfilePanel.this, "This researcher is not in your follow list.", "Unfollow Researcher", JOptionPane.WARNING_MESSAGE);
                 } else {
                     researcher.unfollow(selectedResearcher);
+                    Researcher newResearcher = null;
+                    for(Researcher researcher1 : researcherList) {
+                        if (researcher1.getResearcher_name().equals(researcher.getResearcher_name())) {
+                            newResearcher = researcher1;
+                        }
+                    }
+                    researcherList.get(researcherList.indexOf(newResearcher)).getFollowing_researcher_names().remove(selectedResearcher.getResearcher_name());
                     try {
                         refreshPaperDetailsPanel();
                     } catch (IOException ex) {
