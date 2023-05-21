@@ -73,7 +73,6 @@ public class ResearchersPanel extends JPanel {
                         throw new RuntimeException(ex);
                     }
                     profilePanel.setUsername(username);
-                    // Profil panelini göstermek için uygun JFrame veya başka bir konteyneri kullanın
                     frame.getContentPane().add(profilePanel);
                     frame.revalidate();
                     frame.repaint();

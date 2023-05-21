@@ -5,7 +5,6 @@ import Model.Paper;
 import Model.ReadingList;
 import Model.Researcher;
 import Swing.MainPanel;
-
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;

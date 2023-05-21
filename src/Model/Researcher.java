@@ -2,7 +2,6 @@ package Model;
 
 import Controller.ReadingListController;
 import File.FileCreator;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,24 +51,17 @@ public class Researcher {
 
     public void follow(Researcher researcher) {
         FileCreator fileCreator = new FileCreator();
-        if (following_researcher_names.contains(researcher.researcher_name)) {
-            System.out.println("Researcher already followed");
-        } else {
-            following_researcher_names.add(researcher.getResearcher_name());
-            researcher.getFollower_researcher_names().add(this.researcher_name);
-            fileCreator.xmlUpdater("researchers.xml", this, researcher, true);
-        }
+        following_researcher_names.add(researcher.getResearcher_name());
+        researcher.getFollower_researcher_names().add(this.researcher_name);
+        fileCreator.xmlUpdater("researchers.xml", this, researcher, true);
+
     }
 
     public void unfollow(Researcher researcher) {
         FileCreator fileCreator = new FileCreator();
-        if (following_researcher_names.contains(researcher.researcher_name)) {
-            following_researcher_names.remove(researcher.researcher_name);
-            researcher.getFollower_researcher_names().remove(this.researcher_name);
-            fileCreator.xmlUpdater("researchers.xml", this, researcher, false);
-        } else {
-            System.out.println("Researcher not followed");
-        }
+        following_researcher_names.remove(researcher.researcher_name);
+        researcher.getFollower_researcher_names().remove(this.researcher_name);
+        fileCreator.xmlUpdater("researchers.xml", this, researcher, false);
     }
 
     public String getResearcher_name() {

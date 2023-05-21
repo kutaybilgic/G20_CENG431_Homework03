@@ -52,9 +52,8 @@ public class FileCreator {
                 writer.append(String.valueOf(conferencePaper.getNumber_of_downloads())).append("\n");
             }
 
-            System.out.println("Veriler CSV dosyasına yazıldı.");
         } catch (IOException e) {
-            System.out.println("CSV dosyasına yazılırken bir hata oluştu: " + e.getMessage());
+            System.out.println("An error occurred while writing to the CSV file: " + e.getMessage());
         }
     }
 
@@ -85,7 +84,6 @@ public class FileCreator {
 
             objectMapper.writeValue(file, rootNode);
 
-            System.out.println("ReadingList verileri JSON dosyasına başarıyla yazıldı.");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -118,7 +116,6 @@ public class FileCreator {
                             readingListFound = true;
                             break;
                         } else {
-                            System.out.println("Belirtilen paper başlığı zaten name_of_papers listesinde mevcut.");
                             readingListFound = true;
                             break;
                         }
@@ -126,10 +123,9 @@ public class FileCreator {
                 }
 
                 if (!readingListFound) {
-                    System.out.println("Belirtilen reading list ID'sine sahip bir kayıt bulunamadı.");
+                    System.out.println("No record found with the specified reading list ID.");
                 } else {
                     objectMapper.writeValue(new File(filePath), rootNode);
-                    System.out.println("Paper başarıyla reading list'e eklendi ve JSON dosyası güncellendi.");
                 }
             }
 
@@ -154,9 +150,8 @@ public class FileCreator {
 
                 if (paperRemoved) {
                     objectMapper.writeValue(new File(filePath), rootNode);
-                    System.out.println("Paper başarıyla kaldırıldı ve JSON dosyası güncellendi.");
                 } else {
-                    System.out.println("Belirtilen reading list ID'sine veya paper başlığına sahip bir kayıt bulunamadı.");
+                    System.out.println("No record found with the specified reading list ID or paper title.");
                 }
             }
 
@@ -254,8 +249,6 @@ public class FileCreator {
         DOMSource source = new DOMSource(doc);
         StreamResult result = new StreamResult(new FileOutputStream(filePath));
         transformer.transform(source, result);
-
-        System.out.println("XML file created successfully.");
 
         return researcherList;
 
@@ -357,7 +350,6 @@ public class FileCreator {
                     StreamResult result = new StreamResult(new File(xmlFileName));
                     transformer.transform(source, result);
 
-                    System.out.println("XML file updated successfully.");
                 } else {
                     System.out.println("Follow or follower not found in the XML file.");
                 }
@@ -387,7 +379,6 @@ public class FileCreator {
                 writer.write(updatedContent.toString());
                 writer.close();
 
-                System.out.println("CSV dosyası güncellendi.");
 
             } catch (IOException e) {
                 e.printStackTrace();

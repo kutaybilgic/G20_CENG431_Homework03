@@ -2,7 +2,6 @@ package Model;
 
 
 import File.FileCreator;
-
 import java.util.Random;
 
 public abstract class Paper {

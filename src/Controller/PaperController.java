@@ -4,8 +4,6 @@ import File.FileParser;
 import Model.Article;
 import Model.ConferencePaper;
 import Model.Paper;
-import Model.ReadingList;
-
 import java.io.IOException;
 import java.util.List;
 

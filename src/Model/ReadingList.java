@@ -2,7 +2,6 @@ package Model;
 
 import File.FileCreator;
 import Util.StringGenerator;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

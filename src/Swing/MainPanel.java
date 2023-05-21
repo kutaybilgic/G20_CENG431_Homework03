@@ -1,13 +1,11 @@
 package Swing;
 
-
 import Model.ReadingList;
 import Model.Researcher;
 import Swing.Paper.PaperPanel;
 import Swing.ReadingList.CreateReadingListPanel;
 import Swing.ReadingList.MyReadingListPanel;
 import Swing.Researcher.ResearchersPanel;
-
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;

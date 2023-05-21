@@ -1,12 +1,15 @@
 package Swing.Researcher;
 
 import Controller.ReadingListController;
+import Controller.ResearcherController;
 import Model.ReadingList;
 import Model.Researcher;
-import Swing.MainPanel;
+import Swing.Paper.PaperDetailsPanel;
 import Swing.ReadingList.ViewReadingListPanel;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,12 +31,11 @@ public class ViewProfilePanel extends JPanel {
         this.readingList = readingList;
         this.researcherList = researcherList;
         this.selectedResearcher = selectedResearcher;
+        ResearcherController researcherController = new ResearcherController();
         ReadingListController readingListController = new ReadingListController();
         List<ReadingList> readingListResearcher = readingListController.getAllReadingListsByUsername(selectedResearcher.getResearcher_name());
 
         setLayout(new BorderLayout());
-
-        // Researcher Name'i göstermek için JLabel oluşturun ve özelliklerini ayarlayın
         JLabel nameLabel = new JLabel("Researcher Name: " + selectedResearcher.getResearcher_name());
         nameLabel.setFont(new Font("Arial", Font.BOLD, 22));
         nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -48,15 +50,14 @@ public class ViewProfilePanel extends JPanel {
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.add(Box.createVerticalStrut(10)); // Yukarıda 10 piksel boşluk bırakır
+        contentPanel.add(Box.createVerticalStrut(10));
         contentPanel.add(nameLabel);
         contentPanel.add(followingLabel);
         contentPanel.add(followerLabel);
-        contentPanel.add(Box.createVerticalStrut(10)); // Aşağıda 10 piksel boşluk bırakır
+        contentPanel.add(Box.createVerticalStrut(10));
 
         add(contentPanel, BorderLayout.CENTER);
 
-        // Reading Listelerin görüntülendiği kutuyu oluşturun
         DefaultListModel<String> listModel = new DefaultListModel<>();
         for (ReadingList rList : readingListResearcher) {
             listModel.addElement(rList.getReadinglist_name());
@@ -71,6 +72,71 @@ public class ViewProfilePanel extends JPanel {
         readingListPanel.setLayout(new BorderLayout());
         readingListPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         readingListPanel.add(readingListScrollPane, BorderLayout.CENTER);
+        JPanel panelWrapper = new JPanel(new BorderLayout());
+
+        JButton followButton = new JButton("Follow Researcher");
+        JButton unfollowButton = new JButton("Unfollow Researcher");
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1, 2, 10, 0));
+        if (!(researcher.getResearcher_name().equals(selectedResearcher.getResearcher_name()))) {
+            buttonPanel.add(followButton);
+            buttonPanel.add(unfollowButton);
+            panelWrapper.add(buttonPanel, BorderLayout.CENTER);
+        }
+
+        followButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResearcherController researcherController = new ResearcherController();
+
+                boolean followResult = false;
+                try {
+                    followResult = researcherController.followUnfollowResearcher(selectedResearcher.getResearcher_name(), researcher.getResearcher_name(), true);
+                } catch (ParserConfigurationException | IOException | SAXException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                if (followResult) {
+                    JOptionPane.showMessageDialog(ViewProfilePanel.this, "You have already followed this researcher.", "Follow Researcher", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    researcher.follow(selectedResearcher);
+                    try {
+                        refreshPaperDetailsPanel();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
+
+        unfollowButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResearcherController researcherController = new ResearcherController();
+
+                boolean followResult = false;
+                try {
+                    followResult = researcherController.followUnfollowResearcher(selectedResearcher.getResearcher_name(), researcher.getResearcher_name(), false);
+                } catch (ParserConfigurationException | IOException | SAXException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                if (followResult) {
+                    JOptionPane.showMessageDialog(ViewProfilePanel.this, "This researcher is not in your follow list.", "Unfollow Researcher", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    researcher.unfollow(selectedResearcher);
+                    try {
+                        refreshPaperDetailsPanel();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
+
+
+        panelWrapper.add(readingListScrollPane, BorderLayout.NORTH);
 
         JButton viewReadingListButton = new JButton("View Reading List");
         viewReadingListButton.addActionListener(new ActionListener() {
@@ -111,16 +177,26 @@ public class ViewProfilePanel extends JPanel {
             }
         });
 
-        JPanel buttonPanel = new JPanel();
+
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(viewReadingListButton);
         buttonPanel.add(backButton);
 
-        JPanel panelWrapper = new JPanel(new BorderLayout());
+
         panelWrapper.add(readingListPanel, BorderLayout.CENTER);
         panelWrapper.add(buttonPanel, BorderLayout.SOUTH);
 
         add(panelWrapper, BorderLayout.SOUTH);
+    }
+
+    private void refreshPaperDetailsPanel() throws IOException {
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(ViewProfilePanel.this);
+        frame.getContentPane().removeAll();
+        ViewProfilePanel viewProfilePanel = new ViewProfilePanel(researcher, selectedResearcher, readingList, researcherList);
+        viewProfilePanel.setUsername(username);
+        frame.getContentPane().add(viewProfilePanel);
+        frame.revalidate();
+        frame.repaint();
     }
     public Researcher getResearcher() {
         return researcher;

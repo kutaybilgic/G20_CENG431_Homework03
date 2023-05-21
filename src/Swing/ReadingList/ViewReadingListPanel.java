@@ -1,12 +1,9 @@
 package Swing.ReadingList;
 
 import Controller.PaperController;
-import Controller.ReadingListController;
 import Model.*;
 import Swing.Paper.PaperDetailsPanel;
-import Swing.Researcher.ResearchersPanel;
 import Swing.Researcher.ViewProfilePanel;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -50,6 +47,26 @@ public class ViewReadingListPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(paperList);
         add(scrollPane, BorderLayout.CENTER);
 
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(ViewReadingListPanel.this);
+                frame.getContentPane().removeAll();
+                ViewProfilePanel viewProfilePanel = null;
+                try {
+                    viewProfilePanel = new ViewProfilePanel(researcher, selectedResearcher, readingList, researcherList);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                viewProfilePanel.setUsername(username);
+                frame.getContentPane().add(viewProfilePanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+
         JButton viewPaperButton = new JButton("View Paper");
         viewPaperButton.addActionListener(new ActionListener() {
             @Override
@@ -69,7 +86,11 @@ public class ViewReadingListPanel extends JPanel {
         });
 
 
-        add(viewPaperButton, BorderLayout.PAGE_END);
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.add(backButton, BorderLayout.WEST);
+        buttonPanel.add(viewPaperButton, BorderLayout.EAST);
+
+        add(buttonPanel, BorderLayout.PAGE_END);
     }
 
     public Researcher getResearcher() {

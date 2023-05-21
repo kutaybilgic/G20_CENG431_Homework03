@@ -2,43 +2,43 @@
   <researcher>
     <researcher_name>DilekOzturk</researcher_name>
     <password>ozturkdilek</password>
-    <following_researcher_names><researcher_name>SerhatCaner</researcher_name><researcher_name>TugkanTuglular</researcher_name><researcher_name>NesliErdogmus</researcher_name><researcher_name>AltugYigit</researcher_name></following_researcher_names>
+    <following_researcher_names><researcher_name>SerhatCaner</researcher_name><researcher_name>TugkanTuglular</researcher_name><researcher_name>NesliErdogmus</researcher_name><researcher_name>AltugYigit</researcher_name><researcher_name>SerhatCaner</researcher_name><researcher_name>TugkanTuglular</researcher_name><researcher_name>NesliErdogmus</researcher_name><researcher_name>AltugYigit</researcher_name><researcher_name>SerhatCaner</researcher_name><researcher_name>TugkanTuglular</researcher_name><researcher_name>NesliErdogmus</researcher_name><researcher_name>AltugYigit</researcher_name></following_researcher_names>
     <follower_researcher_names/>
   </researcher>
   <researcher>
     <researcher_name>SerhatCaner</researcher_name>
     <password>canerserhat</password>
     <following_researcher_names/>
-    <follower_researcher_names><researcher_name>DilekOzturk</researcher_name></follower_researcher_names>
+    <follower_researcher_names><researcher_name>DilekOzturk</researcher_name><researcher_name>DilekOzturk</researcher_name><researcher_name>DilekOzturk</researcher_name></follower_researcher_names>
   </researcher>
   <researcher>
     <researcher_name>TugkanTuglular</researcher_name>
     <password>tuglulartugkan</password>
     <following_researcher_names/>
-    <follower_researcher_names><researcher_name>DilekOzturk</researcher_name></follower_researcher_names>
+    <follower_researcher_names><researcher_name>DilekOzturk</researcher_name><researcher_name>DilekOzturk</researcher_name><researcher_name>DilekOzturk</researcher_name></follower_researcher_names>
   </researcher>
   <researcher>
     <researcher_name>NesliErdogmus</researcher_name>
     <password>erdogmusnesli</password>
     <following_researcher_names/>
-    <follower_researcher_names><researcher_name>DilekOzturk</researcher_name></follower_researcher_names>
+    <follower_researcher_names><researcher_name>DilekOzturk</researcher_name><researcher_name>DilekOzturk</researcher_name><researcher_name>DilekOzturk</researcher_name></follower_researcher_names>
   </researcher>
   <researcher>
     <researcher_name>AltugYigit</researcher_name>
     <password>yigitaltug</password>
     <following_researcher_names/>
-    <follower_researcher_names><researcher_name>DilekOzturk</researcher_name></follower_researcher_names>
+    <follower_researcher_names><researcher_name>DilekOzturk</researcher_name><researcher_name>DilekOzturk</researcher_name><researcher_name>DilekOzturk</researcher_name></follower_researcher_names>
   </researcher>
   <researcher>
     <researcher_name>KutayBilgic</researcher_name>
     <password>bilgickutay</password>
-    <following_researcher_names/>
-    <follower_researcher_names/>
+    <following_researcher_names><researcher_name>CanEkenoglu</researcher_name></following_researcher_names>
+    <follower_researcher_names><researcher_name>CanEkenoglu</researcher_name></follower_researcher_names>
   </researcher>
   <researcher>
     <researcher_name>CanEkenoglu</researcher_name>
     <password>ekenoglucan</password>
-    <following_researcher_names/>
-    <follower_researcher_names/>
+    <following_researcher_names><researcher_name>KutayBilgic</researcher_name></following_researcher_names>
+    <follower_researcher_names><researcher_name>KutayBilgic</researcher_name></follower_researcher_names>
   </researcher>
 </researchers>

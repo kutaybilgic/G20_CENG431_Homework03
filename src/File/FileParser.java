@@ -9,9 +9,12 @@ import org.jbibtex.BibTeXParser;
 import org.jbibtex.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -338,6 +341,62 @@ public class FileParser {
                 }
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean isUserInFollowList(String followName, String followerName, boolean isForFollow) throws ParserConfigurationException, IOException, SAXException {
+        try {
+            File file = new File("researchers.xml");
+
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            Document document = factory.newDocumentBuilder().parse(file);
+            document.getDocumentElement().normalize();
+
+            NodeList nodeList = document.getElementsByTagName("researcher");
+
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    String researcherName = element.getElementsByTagName("researcher_name").item(0).getTextContent();
+
+                    if (researcherName.equals(followerName)) {
+                        NodeList followingList = element.getElementsByTagName("following_researcher_names");
+
+                        if (followingList.getLength() > 0) {
+                            Element followingElement = (Element) followingList.item(0);
+                            NodeList followingNames = followingElement.getElementsByTagName("researcher_name");
+
+                            if (isForFollow) {
+                                for (int j = 0; j < followingNames.getLength(); j++) {
+                                    String followingName = followingNames.item(j).getTextContent();
+
+                                    if (followingName.equals(followName)) {
+                                        return true;
+                                    }
+                                }
+                            } else {
+                                for (int j = 0; j < followingNames.getLength(); j++) {
+                                    String followingName = followingNames.item(j).getTextContent();
+
+                                    if (followingName.equals(followName)) {
+                                        return false;
+                                    }
+                                }
+
+                                return true;
+                            }
+                        }
+
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

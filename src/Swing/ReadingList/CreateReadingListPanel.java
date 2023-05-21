@@ -77,7 +77,6 @@ public class CreateReadingListPanel extends JPanel {
                 int selectedIndex = paperComboBox.getSelectedIndex();
                 if (selectedIndex != -1 && !readingListName.isEmpty()) {
                     String selectedPaperTitle = paperComboBox.getItemAt(selectedIndex);
-
                     boolean isExist = readingListController.isListExist(researcher.getResearcher_name(), readingListName);
 
                     if (isExist) {

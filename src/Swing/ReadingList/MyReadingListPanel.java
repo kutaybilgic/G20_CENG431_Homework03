@@ -67,7 +67,6 @@ public class MyReadingListPanel extends JPanel {
                 int selectedIndex = readingListJList.getSelectedIndex();
                 if (selectedIndex != -1) {
                     ReadingList selectedList = readingLists.get(selectedIndex);
-
                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(MyReadingListPanel.this);
                     frame.getContentPane().removeAll();
                     PaperListPanel paperListPanel = new PaperListPanel(researcher,username, readingLists, selectedList,selectedList.getPapers(), researcherList);

@@ -1,10 +1,8 @@
 package Swing.ReadingList;
 
 import Controller.PaperController;
-import Model.Paper;
 import Model.ReadingList;
 import Model.Researcher;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
