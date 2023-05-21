@@ -3,7 +3,7 @@ package Swing.Paper;
 import Controller.PaperController;
 import Model.Paper;
 import Model.ReadingList;
-
+import Model.Researcher;
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -19,10 +19,13 @@ public class PaperDetailsPanel extends JPanel {
     private List<ReadingList> readingLists;
     private JList<String> readingListJList;
 
-    public PaperDetailsPanel(Paper paper, List<ReadingList> readingLists) {
+    private Researcher researcher;
+
+    public PaperDetailsPanel(Researcher researcher, Paper paper, List<ReadingList> readingLists) {
         PaperController paperController = new PaperController();
         this.paper = paper;
         this.readingLists = readingLists;
+        this.researcher = researcher;
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -70,10 +73,10 @@ public class PaperDetailsPanel extends JPanel {
                 int selectedIndex = readingListJList.getSelectedIndex();
                 if (selectedIndex != -1) {
                     ReadingList selectedList = readingLists.get(readingListJList.getSelectedIndex());
-                    boolean added = paperController.isPaperInList(username, selectedList.getReadinglist_name(), paper);
+                    boolean added = paperController.isPaperInList(username, selectedList.getReadinglist_name(), paper.getTitle());
                     if (!added) {
                         try {
-                            selectedList.addPaper(paper);
+                            selectedList.addPaper(paper.getTitle());
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
@@ -134,7 +137,7 @@ public class PaperDetailsPanel extends JPanel {
                 frame.getContentPane().removeAll();
                 PaperPanel paperPanel = null;
                 try {
-                    paperPanel = new PaperPanel(readingLists);
+                    paperPanel = new PaperPanel(researcher,readingLists);
                 } catch (IOException | TransformerException | ParserConfigurationException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -179,7 +182,7 @@ public class PaperDetailsPanel extends JPanel {
     private void refreshPaperDetailsPanel() {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(PaperDetailsPanel.this);
         frame.getContentPane().removeAll();
-        PaperDetailsPanel paperDetailsPanel = new PaperDetailsPanel(paper, readingLists);
+        PaperDetailsPanel paperDetailsPanel = new PaperDetailsPanel(researcher,paper, readingLists);
         paperDetailsPanel.setUsername(username);
         frame.getContentPane().add(paperDetailsPanel);
         frame.revalidate();

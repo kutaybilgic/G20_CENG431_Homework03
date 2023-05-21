@@ -1,9 +1,11 @@
 package Swing;
 
-import Model.ReadingList;
-import Swing.Paper.PaperPanel;
-import Swing.ReadingList.MyReadingListPanel;
 
+import Model.ReadingList;
+import Model.Researcher;
+import Swing.Paper.PaperPanel;
+import Swing.ReadingList.CreateReadingListPanel;
+import Swing.ReadingList.MyReadingListPanel;
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -19,8 +21,11 @@ public class MainPanel extends JPanel {
     private String username;
     private List<ReadingList> readingLists;
 
-    public MainPanel(List<ReadingList> readingLists) {
-        this.readingLists = readingLists;
+    private Researcher researcher;
+
+    public MainPanel(Researcher researcher, List<ReadingList> readingList) throws IOException {
+        this.researcher = researcher;
+        this.readingLists = readingList;
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -41,7 +46,7 @@ public class MainPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 PaperPanel paperPanel = null;
                 try {
-                    paperPanel = new PaperPanel(readingLists);
+                    paperPanel = new PaperPanel(researcher, readingLists);
                 } catch (IOException | ParserConfigurationException | TransformerException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -59,7 +64,12 @@ public class MainPanel extends JPanel {
         createReadingListButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Reading list oluşturma işlemi
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(MainPanel.this);
+                frame.getContentPane().removeAll();
+                CreateReadingListPanel createReadingListPanel = new CreateReadingListPanel(researcher, readingLists);
+                frame.getContentPane().add(createReadingListPanel);
+                frame.revalidate();
+                frame.repaint();
             }
         });
         buttonPanel.add(createReadingListButton, gbc);
@@ -70,7 +80,7 @@ public class MainPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(MainPanel.this);
                 frame.getContentPane().removeAll();
-                MyReadingListPanel myReadingListPanel = new MyReadingListPanel(username, readingLists);
+                MyReadingListPanel myReadingListPanel = new MyReadingListPanel(researcher,username, readingLists);
                 myReadingListPanel.setUsername(username);
                 frame.getContentPane().add(myReadingListPanel);
                 frame.revalidate();
@@ -83,7 +93,7 @@ public class MainPanel extends JPanel {
         viewOtherResearchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Diğer research'leri görüntüleme işlemi
+
             }
         });
         buttonPanel.add(viewOtherResearchButton, gbc);
@@ -121,5 +131,13 @@ public class MainPanel extends JPanel {
 
     public void setReadingLists(List<ReadingList> readingLists) {
         this.readingLists = readingLists;
+    }
+
+    public Researcher getResearcher() {
+        return researcher;
+    }
+
+    public void setResearcher(Researcher researcher) {
+        this.researcher = researcher;
     }
 }

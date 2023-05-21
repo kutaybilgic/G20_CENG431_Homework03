@@ -3,6 +3,7 @@ package Swing.ReadingList;
 import Controller.PaperController;
 import Model.Paper;
 import Model.ReadingList;
+import Model.Researcher;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,23 +14,27 @@ import java.util.List;
 
 public class PaperListPanel extends JPanel {
 
-    private List<Paper> papers;
+    private List<String> papers;
     private String username;
     private List<ReadingList> readingLists;
 
     private ReadingList selectedList;
 
-    public PaperListPanel(String username, List<ReadingList> readingLists, ReadingList selectedList,List<Paper> papers) {
+    private Researcher researcher;
+
+    public PaperListPanel(Researcher researcher,String username, List<ReadingList> readingLists, ReadingList selectedList,List<String> papers) {
         PaperController paperController = new PaperController();
         this.username = username;
         this.readingLists = readingLists;
         this.papers = papers;
+        this.selectedList = selectedList;
+        this.researcher = researcher;
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         DefaultListModel<String> listModel = new DefaultListModel<>();
-        for (Paper paper : papers) {
-            listModel.addElement(paper.getTitle());
+        for (String paper : papers) {
+            listModel.addElement(paper);
         }
 
         JList<String> paperJList = new JList<>(listModel);
@@ -45,7 +50,7 @@ public class PaperListPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(PaperListPanel.this);
                 frame.getContentPane().removeAll();
-                MyReadingListPanel myReadingListPanel = new MyReadingListPanel(username, readingLists);
+                MyReadingListPanel myReadingListPanel = new MyReadingListPanel(researcher,username, readingLists);
                 frame.getContentPane().add(myReadingListPanel);
                 frame.revalidate();
                 frame.repaint();
@@ -57,7 +62,7 @@ public class PaperListPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = paperJList.getSelectedIndex();
                 if (selectedIndex != -1) {
-                    Paper selectedPaper = papers.get(selectedIndex);
+                    String selectedPaper = papers.get(selectedIndex);
                     boolean isInList = paperController.isPaperInList(username, selectedList.getReadinglist_name(), selectedPaper);
                     if (isInList) {
                         try {
@@ -78,11 +83,11 @@ public class PaperListPanel extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    public List<Paper> getPapers() {
+    public List<String> getPapers() {
         return papers;
     }
 
-    public void setPapers(List<Paper> papers) {
+    public void setPapers(List<String> papers) {
         this.papers = papers;
     }
 

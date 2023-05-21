@@ -5,7 +5,6 @@ import Controller.ReadingListController;
 import Controller.ResearcherController;
 import Model.ReadingList;
 import Model.Researcher;
-
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -49,9 +48,19 @@ public class MainFrame extends JFrame {
 
             if (loggedIn) {
                 setUsername(username);
-                this.readingLists = readingListController.getAllReadingListsByUsername(researcherList, username);
-                mainPanel = new MainPanel(readingLists);
+                Researcher researcher = new Researcher(username , password);
+                try {
+                    this.readingLists = readingListController.getAllReadingListsByUsername(username);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                try {
+                    mainPanel = new MainPanel(researcher,readingLists);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 mainPanel.setUsername(username);
+                mainPanel.setResearcher(researcher);
                 setContentPane(mainPanel);
             } else {
                 JOptionPane.showMessageDialog(MainFrame.this, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);

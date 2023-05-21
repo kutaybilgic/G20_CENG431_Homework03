@@ -3,8 +3,6 @@ package Controller;
 import File.FileParser;
 import Model.Article;
 import Model.ConferencePaper;
-import Model.Paper;
-import Model.Researcher;
 
 import java.util.List;
 
@@ -22,7 +20,7 @@ public class PaperController {
         return fileParser.readCSVConferencePaper("papers.csv");
     }
 
-    public boolean isPaperInList(String username, String listName, Paper paper) {
+    public boolean isPaperInList(String username, String listName, String paper) {
         return fileParser.jsonIsPaperInList(paper, username, listName);
     }
 }

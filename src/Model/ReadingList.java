@@ -17,7 +17,7 @@ public class ReadingList {
 
     private int number_of_papers;
 
-    private List<Paper> papers;
+    private List<String> papers;
 
     public ReadingList(String creator_researcher_name, String readingList_name) {
         this.readinglist_id = StringGenerator.generateRandomString(15);
@@ -27,7 +27,7 @@ public class ReadingList {
         this.papers = new ArrayList<>();
     }
 
-    public ReadingList(String readinglist_id, String creator_researcher_name, String readinglist_name, int number_of_papers, List<Paper> papers) {
+    public ReadingList(String readinglist_id, String creator_researcher_name, String readinglist_name, int number_of_papers, List<String> papers) {
         this.readinglist_id = readinglist_id;
         this.creator_researcher_name = creator_researcher_name;
         this.readinglist_name = readinglist_name;
@@ -35,14 +35,14 @@ public class ReadingList {
         this.papers = papers;
     }
 
-    public void addPaper(Paper paper) throws IOException {
+    public void addPaper(String paper) throws IOException {
         FileCreator fileCreator = new FileCreator();
         papers.add(paper);
         number_of_papers++;
         fileCreator.jsonUpdateReadingList(this, paper, true);
     }
 
-    public void removePaper(Paper paper) throws IOException {
+    public void removePaper(String paper) throws IOException {
         FileCreator fileCreator = new FileCreator();
         papers.remove(paper);
         number_of_papers--;
@@ -82,11 +82,11 @@ public class ReadingList {
         this.number_of_papers = number_of_papers;
     }
 
-    public List<Paper> getPapers() {
+    public List<String> getPapers() {
         return papers;
     }
 
-    public void setPapers(List<Paper> papers) {
+    public void setPapers(List<String> papers) {
         this.papers = papers;
     }
 }

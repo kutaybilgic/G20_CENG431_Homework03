@@ -1,7 +1,6 @@
 package Controller;
 
 import File.FileParser;
-import Model.Researcher;
 
 public class LoginController {
 

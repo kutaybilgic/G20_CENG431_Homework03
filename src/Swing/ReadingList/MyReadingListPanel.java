@@ -1,21 +1,25 @@
 package Swing.ReadingList;
 
 import Model.ReadingList;
+import Model.Researcher;
 import Swing.MainPanel;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.List;
 
 public class MyReadingListPanel extends JPanel {
     private String username;
     private List<ReadingList> readingLists;
 
-    public MyReadingListPanel(String username, List<ReadingList> readingLists) {
+    private Researcher researcher;
+
+    public MyReadingListPanel(Researcher researcher, String username, List<ReadingList> readingLists) {
         this.username = username;
         this.readingLists = readingLists;
+        this.researcher = researcher;
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -40,7 +44,12 @@ public class MyReadingListPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(MyReadingListPanel.this);
                 frame.getContentPane().removeAll();
-                MainPanel mainPanel = new MainPanel(readingLists);
+                MainPanel mainPanel = null;
+                try {
+                    mainPanel = new MainPanel(researcher, readingLists);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 mainPanel.setUsername(username);
                 frame.getContentPane().add(mainPanel);
                 frame.revalidate();
@@ -58,7 +67,7 @@ public class MyReadingListPanel extends JPanel {
 
                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(MyReadingListPanel.this);
                     frame.getContentPane().removeAll();
-                    PaperListPanel paperListPanel = new PaperListPanel(username, readingLists, selectedList,selectedList.getPapers());
+                    PaperListPanel paperListPanel = new PaperListPanel(researcher,username, readingLists, selectedList,selectedList.getPapers());
                     frame.getContentPane().add(paperListPanel);
                     frame.revalidate();
                     frame.repaint();

@@ -18,8 +18,10 @@ public class PaperPanel extends JPanel {
     private String username;
 
     private List<ReadingList> readingLists;
-    public PaperPanel(List<ReadingList> readingLists) throws IOException, ParserConfigurationException, TransformerException {
+    private Researcher researcher;
+    public PaperPanel(Researcher researcher, List<ReadingList> readingLists) throws IOException, ParserConfigurationException, TransformerException {
         this.readingLists = readingLists;
+        this.researcher = researcher;
         PaperController paperController = new PaperController();
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -46,7 +48,6 @@ public class PaperPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = list.getSelectedIndex();
                 if (selectedIndex != -1) {
-                    String selectedTitle = model.getElementAt(selectedIndex);
                     Paper selectedPaper = null;
                     if (selectedIndex < articles.size()) {
                         selectedPaper = articles.get(selectedIndex);
@@ -55,7 +56,7 @@ public class PaperPanel extends JPanel {
                     }
                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(PaperPanel.this);
                     frame.getContentPane().removeAll();
-                    PaperDetailsPanel paperDetailsPanel = new PaperDetailsPanel(selectedPaper,readingLists );
+                    PaperDetailsPanel paperDetailsPanel = new PaperDetailsPanel(researcher,selectedPaper,readingLists );
                     paperDetailsPanel.setUsername(username);
                     frame.getContentPane().add(paperDetailsPanel);
                     frame.revalidate();
@@ -71,7 +72,12 @@ public class PaperPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(PaperPanel.this);
                 frame.getContentPane().removeAll();
-                MainPanel mainPanel = new MainPanel(readingLists);
+                MainPanel mainPanel = null;
+                try {
+                    mainPanel = new MainPanel(researcher, readingLists);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 mainPanel.setUsername(username);
                 frame.getContentPane().add(mainPanel);
                 frame.revalidate();

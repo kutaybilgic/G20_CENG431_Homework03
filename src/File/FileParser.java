@@ -10,7 +10,6 @@ import org.jbibtex.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
@@ -125,15 +124,43 @@ public class FileParser {
         return false;
     }
 
-    public List<ReadingList> jsonReadingListParserForUser(List<Researcher> researcherList, String researcherName) {
-        List<ReadingList> readingLists = new ArrayList<>();
-        for (Researcher researcher: researcherList) {
-            if (researcher.getResearcher_name().equals(researcherName)) {
-                readingLists = researcher.getReadingLists();
+    public List<ReadingList> jsonReadingListParserForUser(String researcherName) throws IOException {
+        List<ReadingList> userReadingLists = new ArrayList<>();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        File file = new File("ReadingLists.json");
+        if (!file.exists()) {
+            return null;
+        }
+
+        JsonNode rootNode = objectMapper.readTree(file);
+        Iterator<JsonNode> listIterator = rootNode.elements();
+
+        while (listIterator.hasNext()) {
+            JsonNode listNode = listIterator.next();
+            String creatorName = listNode.get("creator_researcher_name").asText();
+
+            if (creatorName.equals(researcherName)) {
+                String readingListId = listNode.get("readinglist_id").asText();
+                String readingListName = listNode.get("readinglist_name").asText();
+                int numberOfPapers = listNode.get("number_of_papers").asInt();
+
+                List<String> nameOfPapers = new ArrayList<>();
+                Iterator<JsonNode> paperIterator = listNode.get("name_of_papers").elements();
+
+                while (paperIterator.hasNext()) {
+                    JsonNode paperNode = paperIterator.next();
+                    String paperName = paperNode.asText();
+                    nameOfPapers.add(paperName);
+                }
+
+                ReadingList userReadingList = new ReadingList(readingListId, creatorName, readingListName, numberOfPapers, nameOfPapers);
+                userReadingLists.add(userReadingList);
             }
         }
 
-        return readingLists;
+        return userReadingLists;
+
     }
 
     public List<Article> readCSVArticle(String filePath) {
@@ -198,26 +225,22 @@ public class FileParser {
         return objects;
     }
 
-    public boolean jsonIsPaperInList(Paper paper, String username, String listName) {
+    public boolean jsonIsPaperInList(String paper, String username, String listName) {
         try {
-            String jsonContent = Files.readString(Path.of("ReadingLists.json")); // JSON dosyasını oku
+            String jsonContent = Files.readString(Path.of("ReadingLists.json"));
 
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(jsonContent);
 
-            // JSON dizisini dolaş ve uygun listeyi bul
             for (JsonNode listNode : jsonNode) {
                 String listUsername = listNode.get("creator_researcher_name").asText();
                 String currentListName = listNode.get("readinglist_name").asText();
 
-                // İstenilen kullanıcı adı ve liste adı ile eşleşen listeyi bul
                 if (username.equals(listUsername) && listName.equals(currentListName)) {
                     JsonNode nameOfPapersNode = listNode.get("name_of_papers");
-
-                    // Eğer paper'ın başlığı name_of_papers dizisinde varsa true dön
                     for (JsonNode titleNode : nameOfPapersNode) {
                         String title = titleNode.asText();
-                        if (title.equals(paper.getTitle())) {
+                        if (title.equals(paper)) {
                             return true;
                         }
                     }
@@ -228,6 +251,30 @@ public class FileParser {
         }
         return false;
 
+    }
+
+    public boolean jsonIsListExistForUser(String username, String listName) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            File file = new File("ReadingLists.json");
+            if (!file.exists()) {
+                return false;
+            }
+            JsonNode jsonNode = objectMapper.readTree(file);
+
+            for (JsonNode node : jsonNode) {
+                String creatorName = node.get("creator_researcher_name").asText();
+                String readingListName = node.get("readinglist_name").asText();
+
+                if (creatorName.equals(username) && readingListName.equals(listName)) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
 }

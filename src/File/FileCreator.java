@@ -4,7 +4,6 @@ import Model.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -23,10 +22,13 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-
 public class FileCreator {
 
     public void csvWriter(String filePath, List<Article> articleList, List<ConferencePaper> conferencePaperList) {
+        File file = new File(filePath);
+        if (file.exists()) {
+            return;
+        }
         try (java.io.FileWriter writer = new java.io.FileWriter(filePath)) {
             for (Article article : articleList) {
                 writer.append(article.getType()).append(";");
@@ -74,8 +76,8 @@ public class FileCreator {
 
             ObjectNode readingListNode = objectMapper.valueToTree(readingList);
             ArrayNode paperTitlesNode = objectMapper.createArrayNode();
-            for (Paper paper : readingList.getPapers()) {
-                paperTitlesNode.add(paper.getTitle());
+            for (String paper : readingList.getPapers()) {
+                paperTitlesNode.add(paper);
             }
             readingListNode.remove("papers");
             readingListNode.set("name_of_papers", paperTitlesNode);
@@ -90,7 +92,7 @@ public class FileCreator {
         }
     }
 
-    public void jsonUpdateReadingList(ReadingList readingList, Paper paper, boolean isAdd) throws IOException {
+    public void jsonUpdateReadingList(ReadingList readingList, String paper, boolean isAdd) throws IOException {
         String filePath = "ReadingLists.json";
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -104,14 +106,14 @@ public class FileCreator {
                         ArrayNode paperTitlesNode = (ArrayNode) node.get("name_of_papers");
                         boolean paperExists = false;
                         for (JsonNode titleNode : paperTitlesNode) {
-                            if (titleNode.asText().equals(paper.getTitle())) {
+                            if (titleNode.asText().equals(paper)) {
                                 paperExists = true;
                                 break;
                             }
                         }
 
                         if (!paperExists) {
-                            paperTitlesNode.add(paper.getTitle());
+                            paperTitlesNode.add(paper);
                             ((ObjectNode) node).put("number_of_papers", paperTitlesNode.size());
                             readingListFound = true;
                             break;
@@ -138,7 +140,7 @@ public class FileCreator {
                         ArrayNode paperTitlesNode = (ArrayNode) node.get("name_of_papers");
                         for (int i = 0; i < paperTitlesNode.size(); i++) {
                             String paperTitle = paperTitlesNode.get(i).asText();
-                            if (paperTitle.equals(paper.getTitle())) {
+                            if (paperTitle.equals(paper)) {
                                 paperTitlesNode.remove(i);
                                 paperRemoved = true;
                                 break;
@@ -166,7 +168,39 @@ public class FileCreator {
 
     public List<Researcher> xmlWriter(String filePath) throws ParserConfigurationException, TransformerException, FileNotFoundException {
 
+        File file = new File(filePath);
         List<Researcher> researcherList = new ArrayList<>();
+
+        if (file.exists()) {
+
+
+            try {
+                File xmlFile = new File(filePath);
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document document = builder.parse(xmlFile);
+
+                Element root = document.getDocumentElement();
+                NodeList researcherNodes = root.getElementsByTagName("researcher");
+
+                for (int i = 0; i < researcherNodes.getLength(); i++) {
+                    Element researcherElement = (Element) researcherNodes.item(i);
+                    String researcherName = getElementText(researcherElement, "researcher_name");
+                    String password = getElementText(researcherElement, "password");
+
+                    List<String> followingResearcherNames = getNodeTextValues(researcherElement, "following_researcher_names", "researcher_name");
+                    List<String> followerResearcherNames = getNodeTextValues(researcherElement, "follower_researcher_names", "researcher_name");
+
+                    Researcher researcher = new Researcher(researcherName, password, followingResearcherNames, followerResearcherNames);
+                    researcherList.add(researcher);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return researcherList;
+        }
+
+
         Researcher researcher1 = new Researcher("DilekOzturk", "ozturkdilek");
         Researcher researcher2 = new Researcher("SerhatCaner", "canerserhat");
         Researcher researcher3 = new Researcher("TugkanTuglular", "tuglulartugkan");
@@ -225,6 +259,28 @@ public class FileCreator {
 
         return researcherList;
 
+    }
+
+    private String getElementText(Element element, String tagName) {
+        NodeList nodeList = element.getElementsByTagName(tagName);
+        if (nodeList.getLength() > 0) {
+            return nodeList.item(0).getTextContent();
+        }
+        return null;
+    }
+
+    private List<String> getNodeTextValues(Element element, String parentNodeName, String childNodeName) {
+        List<String> values = new ArrayList<>();
+        NodeList parentNodeList = element.getElementsByTagName(parentNodeName);
+        if (parentNodeList.getLength() > 0) {
+            Element parentNode = (Element) parentNodeList.item(0);
+            NodeList childNodeList = parentNode.getElementsByTagName(childNodeName);
+            for (int i = 0; i < childNodeList.getLength(); i++) {
+                Element childNode = (Element) childNodeList.item(i);
+                values.add(childNode.getTextContent());
+            }
+        }
+        return values;
     }
 
     public void xmlUpdater(String xmlFileName, Researcher follow, Researcher follower, boolean isFollow) {
@@ -293,9 +349,9 @@ public class FileCreator {
                     }
                     TransformerFactory transformerFactory = TransformerFactory.newInstance();
                     Transformer transformer = transformerFactory.newTransformer();
-                    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes"); // XML deklarasyonunu kaldır
-                    transformer.setOutputProperty(OutputKeys.METHOD, "xml"); // Çıktı formatını XML olarak ayarla
-                    transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2"); // Girinti miktarı
+                    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+                    transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+                    transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
                     DOMSource source = new DOMSource(doc);
                     StreamResult result = new StreamResult(new File(xmlFileName));

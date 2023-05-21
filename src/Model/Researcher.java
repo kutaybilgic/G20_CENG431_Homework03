@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.ReadingListController;
 import File.FileCreator;
 
 import java.io.IOException;
@@ -12,9 +13,9 @@ public class Researcher {
 
     private String password;
 
-    private List<Researcher> following_researcher_names;
+    private List<String> following_researcher_names;
 
-    private List<Researcher> follower_researcher_names;
+    private List<String> follower_researcher_names;
 
     private List<ReadingList> readingLists;
 
@@ -26,38 +27,45 @@ public class Researcher {
         this.readingLists =  new ArrayList<>();
     }
 
+    public Researcher(String researcher_name, String password, List<String> following_researcher_names, List<String> follower_researcher_names) {
+        this.researcher_name = researcher_name;
+        this.password = password;
+        this.following_researcher_names = following_researcher_names;
+        this.follower_researcher_names = follower_researcher_names;
+        this.readingLists =  new ArrayList<>();
+    }
+
     public ReadingList createReadingList(String readingList_name, Paper paper) throws IOException {
-        for (ReadingList readingList1 : readingLists) {
-            if (readingList1.getReadinglist_name().equals(readingList_name)) {
-                System.out.println("Reading list already exists");
-                return null;
-            }
+        ReadingListController readingListController = new ReadingListController();
+
+        if (readingListController.isListExist(researcher_name, readingList_name)) {
+            return null;
         }
 
         FileCreator fileCreator = new FileCreator();
         ReadingList readingList = new ReadingList(researcher_name, readingList_name);
         readingLists.add(readingList);
         fileCreator.jsonWriter(readingList);
-        readingList.addPaper(paper);
+        readingList.addPaper(paper.getTitle());
         return readingList;
     }
 
     public void follow(Researcher researcher) {
         FileCreator fileCreator = new FileCreator();
-        if (following_researcher_names.contains(researcher)) {
+        if (following_researcher_names.contains(researcher.researcher_name)) {
             System.out.println("Researcher already followed");
         } else {
-            following_researcher_names.add(researcher);
-            researcher.getFollower_researcher_names().add(this);
+            following_researcher_names.add(researcher.getResearcher_name());
+            researcher.getFollower_researcher_names().add(this.researcher_name);
             fileCreator.xmlUpdater("researchers.xml", this, researcher, true);
         }
     }
 
     public void unfollow(Researcher researcher) {
         FileCreator fileCreator = new FileCreator();
-        if (following_researcher_names.contains(researcher)) {
-            following_researcher_names.remove(researcher);
-            researcher.getFollower_researcher_names().remove(this);
+        if (following_researcher_names.contains(researcher.researcher_name)) {
+            following_researcher_names.remove(researcher.researcher_name);
+            researcher.getFollower_researcher_names().remove(this.researcher_name);
             fileCreator.xmlUpdater("researchers.xml", this, researcher, false);
         } else {
             System.out.println("Researcher not followed");
@@ -80,19 +88,19 @@ public class Researcher {
         this.password = password;
     }
 
-    public List<Researcher> getFollowing_researcher_names() {
+    public List<String> getFollowing_researcher_names() {
         return following_researcher_names;
     }
 
-    public void setFollowing_researcher_names(List<Researcher> following_researcher_names) {
+    public void setFollowing_researcher_names(List<String> following_researcher_names) {
         this.following_researcher_names = following_researcher_names;
     }
 
-    public List<Researcher> getFollower_researcher_names() {
+    public List<String> getFollower_researcher_names() {
         return follower_researcher_names;
     }
 
-    public void setFollower_researcher_names(List<Researcher> follower_researcher_names) {
+    public void setFollower_researcher_names(List<String> follower_researcher_names) {
         this.follower_researcher_names = follower_researcher_names;
     }
 
