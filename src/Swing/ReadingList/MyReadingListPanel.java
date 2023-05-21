@@ -16,10 +16,13 @@ public class MyReadingListPanel extends JPanel {
 
     private Researcher researcher;
 
-    public MyReadingListPanel(Researcher researcher, String username, List<ReadingList> readingLists) {
+    private List<Researcher> researcherList;
+
+    public MyReadingListPanel(Researcher researcher, String username, List<ReadingList> readingLists,List<Researcher> researcherList) {
         this.username = username;
         this.readingLists = readingLists;
         this.researcher = researcher;
+        this.researcherList = researcherList;
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -46,7 +49,7 @@ public class MyReadingListPanel extends JPanel {
                 frame.getContentPane().removeAll();
                 MainPanel mainPanel = null;
                 try {
-                    mainPanel = new MainPanel(researcher, readingLists);
+                    mainPanel = new MainPanel(researcher, readingLists, researcherList);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -67,7 +70,7 @@ public class MyReadingListPanel extends JPanel {
 
                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(MyReadingListPanel.this);
                     frame.getContentPane().removeAll();
-                    PaperListPanel paperListPanel = new PaperListPanel(researcher,username, readingLists, selectedList,selectedList.getPapers());
+                    PaperListPanel paperListPanel = new PaperListPanel(researcher,username, readingLists, selectedList,selectedList.getPapers(), researcherList);
                     frame.getContentPane().add(paperListPanel);
                     frame.revalidate();
                     frame.repaint();

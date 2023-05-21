@@ -55,7 +55,7 @@ public class MainFrame extends JFrame {
                     throw new RuntimeException(ex);
                 }
                 try {
-                    mainPanel = new MainPanel(researcher,readingLists);
+                    mainPanel = new MainPanel(researcher,readingLists, researcherList);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }

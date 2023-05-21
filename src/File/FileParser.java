@@ -130,7 +130,7 @@ public class FileParser {
         ObjectMapper objectMapper = new ObjectMapper();
         File file = new File("ReadingLists.json");
         if (!file.exists()) {
-            return null;
+            return new ArrayList<>();
         }
 
         JsonNode rootNode = objectMapper.readTree(file);
@@ -163,7 +163,50 @@ public class FileParser {
 
     }
 
-    public List<Article> readCSVArticle(String filePath) {
+    public List<Paper> jsonReadingListParserByNameArticle(String listName) throws IOException {
+        List<Paper> readingListArticles = new ArrayList<>();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        File file = new File("ReadingLists.json");
+        if (!file.exists()) {
+            return new ArrayList<>();
+        }
+
+        JsonNode rootNode = objectMapper.readTree(file);
+        Iterator<JsonNode> listIterator = rootNode.elements();
+
+        while (listIterator.hasNext()) {
+            JsonNode listNode = listIterator.next();
+            String readinglist_name = listNode.get("readinglist_name").asText();
+
+            if (listName.equals(readinglist_name)) {
+                List<String> nameOfPapers = new ArrayList<>();
+                Iterator<JsonNode> paperIterator = listNode.get("name_of_papers").elements();
+
+                while (paperIterator.hasNext()) {
+                    JsonNode paperNode = paperIterator.next();
+                    String paperName = paperNode.asText();
+                    nameOfPapers.add(paperName);
+                }
+
+                for (String booktitle : nameOfPapers) {
+                    List<Article> article = readCSVArticle("papers.csv", booktitle, true);
+                    List<ConferencePaper> conferencePaper = readCSVConferencePaper("papers.csv", booktitle, true);
+
+                    if(article.size() > 0) {
+                        readingListArticles.addAll(article);
+                    }
+                    if(conferencePaper.size() > 0) {
+                        readingListArticles.addAll(conferencePaper);
+                    }
+                }
+
+            }
+        }
+        return readingListArticles;
+    }
+
+    public List<Article> readCSVArticle(String filePath, String paperTitle, boolean isTitle) {
         List<Article> objects = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -179,12 +222,25 @@ public class FileParser {
                     String doi = parts[4].trim();
 
                     if (type.equalsIgnoreCase("Article")) {
-                        String volume = parts[5].trim();
-                        String number = parts[6].trim();
-                        String journal = parts[7].trim();
-                        String download = parts[8].trim();
-                        Article article = new Article(authors, title, Integer.parseInt(year), doi, Integer.parseInt(download), type, Integer.parseInt(volume), number, journal);
-                        objects.add(article);
+                        if (isTitle) {
+                            if (paperTitle.equals(title)) {
+                                String volume = parts[5].trim();
+                                String number = parts[6].trim();
+                                String journal = parts[7].trim();
+                                String download = parts[8].trim();
+                                Article article = new Article(authors, title, Integer.parseInt(year), doi, Integer.parseInt(download), type, Integer.parseInt(volume), number, journal);
+                                objects.add(article);
+                            }
+                        }
+                        else{
+                            String volume = parts[5].trim();
+                            String number = parts[6].trim();
+                            String journal = parts[7].trim();
+                            String download = parts[8].trim();
+                            Article article = new Article(authors, title, Integer.parseInt(year), doi, Integer.parseInt(download), type, Integer.parseInt(volume), number, journal);
+                            objects.add(article);
+                        }
+
                     }
                 }
             }
@@ -195,7 +251,7 @@ public class FileParser {
         return objects;
     }
 
-    public List<ConferencePaper> readCSVConferencePaper(String filePath) {
+    public List<ConferencePaper> readCSVConferencePaper(String filePath, String paperTitle, boolean isTitle) {
         List<ConferencePaper> objects = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -211,10 +267,21 @@ public class FileParser {
                     String doi = parts[4].trim();
 
                     if (type.equalsIgnoreCase("Conference Paper")) {
-                        String boooktitle = parts[5].trim();
-                        String download = parts[6].trim();
-                        ConferencePaper conferencePaper = new ConferencePaper(authors, title, Integer.parseInt(year), doi, Integer.parseInt(download), type,boooktitle );
-                        objects.add(conferencePaper);
+                        if (isTitle) {
+                            if (paperTitle.equals(title)) {
+                                String boooktitle = parts[5].trim();
+                                String download = parts[6].trim();
+                                ConferencePaper conferencePaper = new ConferencePaper(authors, title, Integer.parseInt(year), doi, Integer.parseInt(download), type,boooktitle );
+                                objects.add(conferencePaper);
+                            }
+                        }
+                        else {
+                            String boooktitle = parts[5].trim();
+                            String download = parts[6].trim();
+                            ConferencePaper conferencePaper = new ConferencePaper(authors, title, Integer.parseInt(year), doi, Integer.parseInt(download), type,boooktitle );
+                            objects.add(conferencePaper);
+                        }
+
                     }
                 }
             }

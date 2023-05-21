@@ -4,6 +4,8 @@ import Controller.PaperController;
 import Model.Paper;
 import Model.ReadingList;
 import Model.Researcher;
+import Swing.MainPanel;
+
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -21,11 +23,17 @@ public class PaperDetailsPanel extends JPanel {
 
     private Researcher researcher;
 
-    public PaperDetailsPanel(Researcher researcher, Paper paper, List<ReadingList> readingLists) {
+    private List<Researcher> researcherList;
+
+    private boolean isTrue;
+
+    public PaperDetailsPanel(Researcher researcher, Paper paper, List<ReadingList> readingLists, List<Researcher> researcherList, boolean isTrue) {
         PaperController paperController = new PaperController();
         this.paper = paper;
         this.readingLists = readingLists;
         this.researcher = researcher;
+        this.researcherList = researcherList;
+        this.isTrue = isTrue;
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -133,18 +141,35 @@ public class PaperDetailsPanel extends JPanel {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(PaperDetailsPanel.this);
-                frame.getContentPane().removeAll();
-                PaperPanel paperPanel = null;
-                try {
-                    paperPanel = new PaperPanel(researcher,readingLists);
-                } catch (IOException | TransformerException | ParserConfigurationException ex) {
-                    throw new RuntimeException(ex);
+                if (isTrue) {
+                    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(PaperDetailsPanel.this);
+                    frame.getContentPane().removeAll();
+                    PaperPanel paperPanel = null;
+                    try {
+                        paperPanel = new PaperPanel(researcher,readingLists, researcherList);
+                    } catch (IOException | TransformerException | ParserConfigurationException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    paperPanel.setUsername(username);
+                    frame.getContentPane().add(paperPanel);
+                    frame.revalidate();
+                    frame.repaint();
                 }
-                paperPanel.setUsername(username);
-                frame.getContentPane().add(paperPanel);
-                frame.revalidate();
-                frame.repaint();
+                else {
+                    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(PaperDetailsPanel.this);
+                    frame.getContentPane().removeAll();
+                    MainPanel mainPanel = null;
+                    try {
+                        mainPanel = new MainPanel(researcher, readingLists, researcherList);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    mainPanel.setUsername(username);
+                    frame.getContentPane().add(mainPanel);
+                    frame.revalidate();
+                    frame.repaint();
+                }
+
             }
         });
 
@@ -182,10 +207,18 @@ public class PaperDetailsPanel extends JPanel {
     private void refreshPaperDetailsPanel() {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(PaperDetailsPanel.this);
         frame.getContentPane().removeAll();
-        PaperDetailsPanel paperDetailsPanel = new PaperDetailsPanel(researcher,paper, readingLists);
+        PaperDetailsPanel paperDetailsPanel = new PaperDetailsPanel(researcher,paper, readingLists, researcherList, isTrue);
         paperDetailsPanel.setUsername(username);
         frame.getContentPane().add(paperDetailsPanel);
         frame.revalidate();
         frame.repaint();
+    }
+
+    public boolean isTrue() {
+        return isTrue;
+    }
+
+    public void setTrue(boolean aTrue) {
+        isTrue = aTrue;
     }
 }

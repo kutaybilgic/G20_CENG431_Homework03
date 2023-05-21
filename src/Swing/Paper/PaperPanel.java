@@ -19,9 +19,12 @@ public class PaperPanel extends JPanel {
 
     private List<ReadingList> readingLists;
     private Researcher researcher;
-    public PaperPanel(Researcher researcher, List<ReadingList> readingLists) throws IOException, ParserConfigurationException, TransformerException {
+
+    private List<Researcher> researcherList;
+    public PaperPanel(Researcher researcher, List<ReadingList> readingLists, List<Researcher> researcherList) throws IOException, ParserConfigurationException, TransformerException {
         this.readingLists = readingLists;
         this.researcher = researcher;
+        this.researcherList = researcherList;
         PaperController paperController = new PaperController();
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -56,7 +59,7 @@ public class PaperPanel extends JPanel {
                     }
                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(PaperPanel.this);
                     frame.getContentPane().removeAll();
-                    PaperDetailsPanel paperDetailsPanel = new PaperDetailsPanel(researcher,selectedPaper,readingLists );
+                    PaperDetailsPanel paperDetailsPanel = new PaperDetailsPanel(researcher,selectedPaper,readingLists,researcherList, true);
                     paperDetailsPanel.setUsername(username);
                     frame.getContentPane().add(paperDetailsPanel);
                     frame.revalidate();
@@ -74,7 +77,7 @@ public class PaperPanel extends JPanel {
                 frame.getContentPane().removeAll();
                 MainPanel mainPanel = null;
                 try {
-                    mainPanel = new MainPanel(researcher, readingLists);
+                    mainPanel = new MainPanel(researcher, readingLists, researcherList);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }

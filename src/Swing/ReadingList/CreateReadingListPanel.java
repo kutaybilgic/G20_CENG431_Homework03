@@ -18,11 +18,14 @@ public class CreateReadingListPanel extends JPanel {
     private JComboBox<String> paperComboBox;
     private List<ReadingList> readingLists;
 
-    public CreateReadingListPanel(Researcher researcher, List<ReadingList> readingLists) {
+    private List<Researcher> researcherList;
+
+    public CreateReadingListPanel(Researcher researcher, List<ReadingList> readingLists, List<Researcher> researcherList) {
         PaperController paperController = new PaperController();
         ReadingListController readingListController = new ReadingListController();
         this.researcher = researcher;
         this.readingLists = readingLists;
+        this.researcherList = researcherList;
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -134,7 +137,7 @@ public class CreateReadingListPanel extends JPanel {
                 try {
                     ReadingListController readingListController = new ReadingListController();
                     List<ReadingList> readingListsNew = readingListController.getAllReadingListsByUsername(researcher.getResearcher_name());
-                    mainPanel = new MainPanel(researcher, readingListsNew);
+                    mainPanel = new MainPanel(researcher, readingListsNew, researcherList);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
